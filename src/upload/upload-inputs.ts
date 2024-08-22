@@ -30,4 +30,11 @@ export interface UploadInputs {
    * Whether or not to replace an existing artifact with the same name
    */
   overwrite: boolean
+
+  /**
+   * Whether symbolic links should be followed and expanded when building the set of files to be
+   * archived (true), or if symbolic links should be included in the archived artifact verbatim
+   * (false).
+   */
+  followSymlinks: boolean
 }
