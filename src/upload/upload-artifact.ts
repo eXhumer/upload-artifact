@@ -3,7 +3,7 @@ import artifact, {
   UploadArtifactOptions,
   ArtifactNotFoundError
 } from '@actions/artifact'
-import {findFilesToUpload} from '../shared/search'
+import {findFilesToUpload, getDefaultGlobOptions} from '../shared/search'
 import {getInputs} from './input-helper'
 import {NoFileOptions} from './constants'
 import {uploadArtifact} from '../shared/upload-artifact'
@@ -24,7 +24,12 @@ async function deleteArtifactIfExists(artifactName: string): Promise<void> {
 
 export async function run(): Promise<void> {
   const inputs = getInputs()
-  const searchResult = await findFilesToUpload(inputs.searchPath)
+  const globOptions = {
+    ...getDefaultGlobOptions(),
+    followSymbolicLinks: inputs.followSymlinks
+  }
+  const searchResult = await findFilesToUpload(inputs.searchPath, globOptions)
+
   if (searchResult.filesToUpload.length === 0) {
     // No files were found, different use cases warrant different types of behavior if nothing is found
     switch (inputs.ifNoFilesFound) {
